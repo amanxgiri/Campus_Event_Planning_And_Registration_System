@@ -12,25 +12,37 @@ public class ParticipantService {
     }
 
     public void addParticipant(Participant participant) {
-        // TODO: implement inserting participant
-        this.participants.add(participant);
+        if (participant != null) {
+            this.participants.add(participant);
+        }
     }
 
     public void updateParticipant(Participant participant) {
-        // TODO: implement updating participant
+        if (participant == null) {
+            return;
+        }
+        for (int i = 0; i < participants.size(); i++) {
+            if (participants.get(i).getParticipantId() == participant.getParticipantId()) {
+                participants.set(i, participant);
+                return;
+            }
+        }
     }
 
     public void deleteParticipant(int participantId) {
-        // TODO: implement deleting participant
+        participants.removeIf(p -> p.getParticipantId() == participantId);
     }
 
     public List<Participant> getAllParticipants() {
-        // TODO: implement fetching all
-        return this.participants;
+        return new ArrayList<>(this.participants);
     }
 
     public Participant findParticipantById(int participantId) {
-        // TODO: implement fetching by ID
+        for (Participant participant : participants) {
+            if (participant.getParticipantId() == participantId) {
+                return participant;
+            }
+        }
         return null;
     }
 }
