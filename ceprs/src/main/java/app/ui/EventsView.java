@@ -140,9 +140,24 @@ public class EventsView {
         table.getColumns().addAll(idCol, nameCol, typeCol, dateCol, timeCol, venueCol, capCol, regCol, waitCol,
                 statCol);
 
+        // Table row selection
+        table.getSelectionModel().selectedItemProperty().addListener((obs, old, selected) -> {
+            if (selected != null) {
+                idField.setText(String.valueOf(selected.getEventId()));
+                nameField.setText(selected.getEventName());
+                typeCombo.setValue(selected.getEventType());
+                datePicker.setValue(selected.getEventDate());
+                timeField.setText(selected.getEventTime());
+                venueField.setText(selected.getVenue());
+                capacityField.setText(String.valueOf(selected.getCapacity()));
+                statusCombo.setValue(selected.getStatus());
+            }
+        });
+
         // Button Actions
         addBtn.setOnAction(e -> {
             Event event = new Event();
+            event.setEventId(eventService.getAllEvents().size() + 1);
             event.setEventName(nameField.getText());
             event.setEventType(typeCombo.getValue());
             event.setEventDate(datePicker.getValue());
@@ -162,6 +177,37 @@ public class EventsView {
             clearForm();
         });
 
+        updateBtn.setOnAction(e -> {
+            Event selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                selected.setEventName(nameField.getText());
+                selected.setEventType(typeCombo.getValue());
+                selected.setEventDate(datePicker.getValue());
+                selected.setEventTime(timeField.getText());
+                selected.setVenue(venueField.getText());
+
+                try {
+                    selected.setCapacity(Integer.parseInt(capacityField.getText()));
+                } catch (NumberFormatException ex) {
+                    selected.setCapacity(0);
+                }
+
+                selected.setStatus(statusCombo.getValue());
+
+                eventService.updateEvent(selected);
+                refreshTable();
+            }
+        });
+
+        deleteBtn.setOnAction(e -> {
+            Event selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                eventService.deleteEvent(selected.getEventId());
+                refreshTable();
+                clearForm();
+            }
+        });
+
         clearBtn.setOnAction(e -> clearForm());
 
         // Assemble everything
@@ -176,6 +222,7 @@ public class EventsView {
     }
 
     private void clearForm() {
+        table.getSelectionModel().clearSelection();
         idField.setText(String.valueOf(eventService.getAllEvents().size() + 1));
         nameField.setText("");
         typeCombo.getSelectionModel().clearSelection();
