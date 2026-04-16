@@ -1,6 +1,8 @@
 package app.ui;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -66,14 +68,42 @@ public class MainLayout {
         // 3. Content Area (Center)
         this.contentArea = new StackPane();
         this.contentArea.setPadding(new Insets(20));
-        
+
         DashboardView dashboardView = new DashboardView();
-        this.contentArea.getChildren().add(dashboardView.getView());
+        setContent(dashboardView.getView());
+
+        // Button Actions
+        dashboardBtn.setOnAction(e -> setContent(new DashboardView().getView()));
+        eventsBtn.setOnAction(e -> setContent(createPlaceholderView("Events")));
+        participantsBtn.setOnAction(e -> setContent(createPlaceholderView("Participants")));
+        registrationsBtn.setOnAction(e -> setContent(createPlaceholderView("Registrations")));
+        attendanceBtn.setOnAction(e -> setContent(createPlaceholderView("Attendance")));
+        searchReportsBtn.setOnAction(e -> setContent(createPlaceholderView("Search & Reports")));
 
         // Assemble the BorderPane
         this.root.setTop(this.header);
         this.root.setLeft(this.sidebar);
         this.root.setCenter(this.contentArea);
+    }
+
+    private void setContent(Parent view) {
+        this.contentArea.getChildren().setAll(view);
+    }
+
+    private Parent createPlaceholderView(String title) {
+        VBox placeholder = new VBox(20);
+        placeholder.setAlignment(Pos.CENTER);
+        
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
+        titleLabel.setTextFill(Color.web("#2c3e50"));
+        
+        Label subtitleLabel = new Label("This section is under construction");
+        subtitleLabel.setFont(Font.font("System", 16));
+        subtitleLabel.setTextFill(Color.web("#7f8c8d"));
+        
+        placeholder.getChildren().addAll(titleLabel, subtitleLabel);
+        return placeholder;
     }
 
     public BorderPane getRoot() {
