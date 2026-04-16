@@ -1,5 +1,6 @@
 package com.giri.events;
 
+import app.ui.MainLayout;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +18,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        MainLayout mainLayout = new MainLayout();
+        scene = new Scene(mainLayout.getRoot(), 1000, 700);
         stage.setScene(scene);
         stage.show();
     }
