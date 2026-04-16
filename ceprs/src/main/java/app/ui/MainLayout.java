@@ -77,7 +77,7 @@ public class MainLayout {
         // Button Actions
         dashboardBtn.setOnAction(e -> setContent(new DashboardView(eventService).getView()));
         eventsBtn.setOnAction(e -> setContent(new EventsView(eventService).getView()));
-        participantsBtn.setOnAction(e -> setContent(createPlaceholderView("Participants")));
+        participantsBtn.setOnAction(e -> setContent(new ParticipantsView().getView()));
         registrationsBtn.setOnAction(e -> setContent(createPlaceholderView("Registrations")));
         attendanceBtn.setOnAction(e -> setContent(createPlaceholderView("Attendance")));
         searchReportsBtn.setOnAction(e -> setContent(createPlaceholderView("Search & Reports")));
