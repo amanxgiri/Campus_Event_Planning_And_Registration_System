@@ -24,7 +24,7 @@ import java.time.LocalDate;
 public class EventsView {
 
     private final VBox root;
-    private final EventService eventService = new EventService();
+    private final EventService eventService;
 
     private final TextField idField;
     private final TextField nameField;
@@ -36,7 +36,8 @@ public class EventsView {
     private final ComboBox<String> statusCombo;
     private final TableView<Event> table;
 
-    public EventsView() {
+    public EventsView(EventService eventService) {
+        this.eventService = eventService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
 
