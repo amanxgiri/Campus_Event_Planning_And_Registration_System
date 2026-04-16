@@ -12,7 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -109,34 +110,34 @@ public class EventsView {
         this.table = new TableView<>();
 
         TableColumn<Event, Integer> idCol = new TableColumn<>("Event ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("eventId"));
+        idCol.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getEventId()));
 
         TableColumn<Event, String> nameCol = new TableColumn<>("Event Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("eventName"));
+        nameCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getEventName()));
 
         TableColumn<Event, String> typeCol = new TableColumn<>("Event Type");
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("eventType"));
+        typeCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getEventType()));
 
         TableColumn<Event, LocalDate> dateCol = new TableColumn<>("Event Date");
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
+        dateCol.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getEventDate()));
 
         TableColumn<Event, String> timeCol = new TableColumn<>("Event Time");
-        timeCol.setCellValueFactory(new PropertyValueFactory<>("eventTime"));
+        timeCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getEventTime()));
 
         TableColumn<Event, String> venueCol = new TableColumn<>("Venue");
-        venueCol.setCellValueFactory(new PropertyValueFactory<>("venue"));
+        venueCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getVenue()));
 
         TableColumn<Event, Integer> capCol = new TableColumn<>("Capacity");
-        capCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+        capCol.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getCapacity()));
 
         TableColumn<Event, Integer> regCol = new TableColumn<>("Registered");
-        regCol.setCellValueFactory(new PropertyValueFactory<>("registeredCount"));
+        regCol.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getRegisteredCount()));
 
         TableColumn<Event, Integer> waitCol = new TableColumn<>("Waitlist");
-        waitCol.setCellValueFactory(new PropertyValueFactory<>("waitlistCount"));
+        waitCol.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getWaitlistCount()));
 
         TableColumn<Event, String> statCol = new TableColumn<>("Status");
-        statCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getStatus()));
 
         table.getColumns().addAll(idCol, nameCol, typeCol, dateCol, timeCol, venueCol, capCol, regCol, waitCol,
                 statCol);

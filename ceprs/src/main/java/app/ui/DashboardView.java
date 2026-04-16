@@ -1,5 +1,6 @@
 package app.ui;
 
+import app.service.EventService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -13,8 +14,10 @@ import javafx.scene.text.FontWeight;
 public class DashboardView {
 
     private final VBox root;
+    private final EventService eventService;
 
-    public DashboardView() {
+    public DashboardView(EventService eventService) {
+        this.eventService = eventService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
         // Optional light styling for the background of the view
@@ -28,8 +31,11 @@ public class DashboardView {
         // Cards container
         FlowPane cardsContainer = new FlowPane(15, 15);
 
+        String totalEvents = (this.eventService != null) ? String.valueOf(this.eventService.getAllEvents().size())
+                : "0";
+
         cardsContainer.getChildren().addAll(
-                createStatCard("Total Events", "0"),
+                createStatCard("Total Events", totalEvents),
                 createStatCard("Total Participants", "0"),
                 createStatCard("Confirmed Registrations", "0"),
                 createStatCard("Waitlisted Participants", "0"),

@@ -71,11 +71,11 @@ public class MainLayout {
         this.contentArea = new StackPane();
         this.contentArea.setPadding(new Insets(20));
 
-        DashboardView dashboardView = new DashboardView();
+        DashboardView dashboardView = new DashboardView(eventService);
         setContent(dashboardView.getView());
 
         // Button Actions
-        dashboardBtn.setOnAction(e -> setContent(new DashboardView().getView()));
+        dashboardBtn.setOnAction(e -> setContent(new DashboardView(eventService).getView()));
         eventsBtn.setOnAction(e -> setContent(new EventsView(eventService).getView()));
         participantsBtn.setOnAction(e -> setContent(createPlaceholderView("Participants")));
         registrationsBtn.setOnAction(e -> setContent(createPlaceholderView("Registrations")));
