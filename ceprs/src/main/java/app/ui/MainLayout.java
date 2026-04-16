@@ -74,7 +74,7 @@ public class MainLayout {
 
         // Button Actions
         dashboardBtn.setOnAction(e -> setContent(new DashboardView().getView()));
-        eventsBtn.setOnAction(e -> setContent(createPlaceholderView("Events")));
+        eventsBtn.setOnAction(e -> setContent(new EventsView().getView()));
         participantsBtn.setOnAction(e -> setContent(createPlaceholderView("Participants")));
         registrationsBtn.setOnAction(e -> setContent(createPlaceholderView("Registrations")));
         attendanceBtn.setOnAction(e -> setContent(createPlaceholderView("Attendance")));
@@ -93,15 +93,15 @@ public class MainLayout {
     private Parent createPlaceholderView(String title) {
         VBox placeholder = new VBox(20);
         placeholder.setAlignment(Pos.CENTER);
-        
+
         Label titleLabel = new Label(title);
         titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
         titleLabel.setTextFill(Color.web("#2c3e50"));
-        
+
         Label subtitleLabel = new Label("This section is under construction");
         subtitleLabel.setFont(Font.font("System", 16));
         subtitleLabel.setTextFill(Color.web("#7f8c8d"));
-        
+
         placeholder.getChildren().addAll(titleLabel, subtitleLabel);
         return placeholder;
     }
