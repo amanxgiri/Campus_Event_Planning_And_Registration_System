@@ -66,9 +66,9 @@ public class MainLayout {
         // 3. Content Area (Center)
         this.contentArea = new StackPane();
         this.contentArea.setPadding(new Insets(20));
-        Label contentLabel = new Label("Main content area");
-        contentLabel.setFont(Font.font("System", 16));
-        this.contentArea.getChildren().add(contentLabel);
+        
+        DashboardView dashboardView = new DashboardView();
+        this.contentArea.getChildren().add(dashboardView.getView());
 
         // Assemble the BorderPane
         this.root.setTop(this.header);
