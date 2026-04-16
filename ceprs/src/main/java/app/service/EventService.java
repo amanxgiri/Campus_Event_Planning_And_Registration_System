@@ -12,30 +12,51 @@ public class EventService {
     }
 
     public void addEvent(Event event) {
-        // TODO: implement adding event
-        this.events.add(event);
+        if (event != null) {
+            this.events.add(event);
+        }
     }
 
     public void updateEvent(Event event) {
-        // TODO: implement updating event
+        if (event == null) {
+            return;
+        }
+        for (int i = 0; i < events.size(); i++) {
+            if (events.get(i).getEventId() == event.getEventId()) {
+                events.set(i, event);
+                return;
+            }
+        }
     }
 
     public void deleteEvent(int eventId) {
-        // TODO: implement deleting event
+        events.removeIf(e -> e.getEventId() == eventId);
     }
 
     public List<Event> getAllEvents() {
-        // TODO: implement returning all events
-        return this.events;
+        return new ArrayList<>(this.events);
     }
 
     public Event findEventById(int eventId) {
-        // TODO: implement finding event
+        for (Event event : events) {
+            if (event.getEventId() == eventId) {
+                return event;
+            }
+        }
         return null;
     }
 
     public List<Event> searchEventsByName(String keyword) {
-        // TODO: implement searching events
-        return new ArrayList<>();
+        List<Event> result = new ArrayList<>();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return result;
+        }
+        String searchLower = keyword.toLowerCase();
+        for (Event event : events) {
+            if (event.getEventName() != null && event.getEventName().toLowerCase().contains(searchLower)) {
+                result.add(event);
+            }
+        }
+        return result;
     }
 }
