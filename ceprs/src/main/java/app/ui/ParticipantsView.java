@@ -1,6 +1,10 @@
 package app.ui;
 
 import app.model.Participant;
+import app.service.ParticipantService;
+import javafx.collections.FXCollections;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -17,6 +21,13 @@ import javafx.scene.text.FontWeight;
 public class ParticipantsView {
 
     private final VBox root;
+    private final ParticipantService participantService = new ParticipantService();
+
+    private final TextField idField;
+    private final TextField nameField;
+    private final TextField emailField;
+    private final TextField phoneField;
+    private final TableView<Participant> table;
 
     public ParticipantsView() {
         this.root = new VBox(20);
@@ -30,18 +41,18 @@ public class ParticipantsView {
         formGrid.setHgap(15);
         formGrid.setVgap(10);
 
-        TextField idField = new TextField();
-        idField.setPromptText("Participant ID");
-        idField.setEditable(false);
+        this.idField = new TextField();
+        this.idField.setPromptText("Participant ID");
+        this.idField.setEditable(false);
 
-        TextField nameField = new TextField();
-        nameField.setPromptText("Name");
+        this.nameField = new TextField();
+        this.nameField.setPromptText("Name");
 
-        TextField emailField = new TextField();
-        emailField.setPromptText("Email");
+        this.emailField = new TextField();
+        this.emailField.setPromptText("Email");
 
-        TextField phoneField = new TextField();
-        phoneField.setPromptText("Phone");
+        this.phoneField = new TextField();
+        this.phoneField.setPromptText("Phone");
 
         formGrid.add(new Label("Participant ID:"), 0, 0);
         formGrid.add(idField, 1, 0);
@@ -63,16 +74,53 @@ public class ParticipantsView {
         buttonBox.getChildren().addAll(addBtn, updateBtn, deleteBtn, clearBtn);
 
         // 3. Table Section
-        TableView<Participant> table = new TableView<>();
+        this.table = new TableView<>();
 
         TableColumn<Participant, Integer> idCol = new TableColumn<>("Participant ID");
+        idCol.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getParticipantId()));
+
         TableColumn<Participant, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
+
         TableColumn<Participant, String> emailCol = new TableColumn<>("Email");
+        emailCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getEmail()));
+
         TableColumn<Participant, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getPhone()));
 
         table.getColumns().addAll(idCol, nameCol, emailCol, phoneCol);
 
+        // Events
+        addBtn.setOnAction(e -> {
+            Participant participant = new Participant();
+            participant.setParticipantId(participantService.getAllParticipants().size() + 1);
+            participant.setName(nameField.getText());
+            participant.setEmail(emailField.getText());
+            participant.setPhone(phoneField.getText());
+
+            participantService.addParticipant(participant);
+            refreshTable();
+            clearForm();
+        });
+
+        clearBtn.setOnAction(e -> clearForm());
+
         this.root.getChildren().addAll(titleLabel, formGrid, buttonBox, table);
+
+        refreshTable();
+        clearForm();
+    }
+
+    private void refreshTable() {
+        table.setItems(FXCollections.observableArrayList(participantService.getAllParticipants()));
+    }
+
+    private void clearForm() {
+        idField.setText(String.valueOf(participantService.getAllParticipants().size() + 1));
+        nameField.setText("");
+        emailField.setText("");
+        phoneField.setText("");
+        table.getSelectionModel().clearSelection();
     }
 
     public Parent getView() {
