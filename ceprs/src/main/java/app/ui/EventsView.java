@@ -185,6 +185,7 @@ public class EventsView {
             event.setStatus(statusCombo.getValue());
 
             eventService.addEvent(event);
+            syncEventRegistrationCounts(event.getEventId());
             feedbackLabel.setText("");
             refreshTable();
             clearForm();
@@ -208,6 +209,7 @@ public class EventsView {
                 selected.setStatus(statusCombo.getValue());
 
                 eventService.updateEvent(selected);
+                syncEventRegistrationCounts(selected.getEventId());
                 feedbackLabel.setText("");
                 refreshTable();
             }
@@ -240,6 +242,14 @@ public class EventsView {
 
     private void refreshTable() {
         table.setItems(FXCollections.observableArrayList(eventService.getAllEvents()));
+    }
+
+    private void syncEventRegistrationCounts(int eventId) {
+        Event event = eventService.findEventById(eventId);
+        if (event != null) {
+            registrationService.applyCapacityRules(eventId, event.getCapacity());
+            eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
+        }
     }
 
     private void clearForm() {
