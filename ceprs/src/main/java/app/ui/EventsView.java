@@ -1,7 +1,9 @@
 package app.ui;
 
 import app.model.Event;
+import app.service.AttendanceService;
 import app.service.EventService;
+import app.service.RegistrationService;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -26,6 +28,8 @@ public class EventsView {
 
     private final VBox root;
     private final EventService eventService;
+    private final RegistrationService registrationService;
+    private final AttendanceService attendanceService;
 
     private final TextField idField;
     private final TextField nameField;
@@ -36,9 +40,13 @@ public class EventsView {
     private final TextField capacityField;
     private final ComboBox<String> statusCombo;
     private final TableView<Event> table;
+    private final Label feedbackLabel;
 
-    public EventsView(EventService eventService) {
+    public EventsView(EventService eventService, RegistrationService registrationService,
+            AttendanceService attendanceService) {
         this.eventService = eventService;
+        this.registrationService = registrationService;
+        this.attendanceService = attendanceService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
 
@@ -76,6 +84,8 @@ public class EventsView {
         this.statusCombo = new ComboBox<>(FXCollections.observableArrayList(
                 "UPCOMING", "ONGOING", "COMPLETED"));
         this.statusCombo.setPromptText("Status");
+
+        this.feedbackLabel = new Label();
 
         formGrid.add(new Label("Event ID:"), 0, 0);
         formGrid.add(idField, 1, 0);
@@ -175,6 +185,7 @@ public class EventsView {
             event.setStatus(statusCombo.getValue());
 
             eventService.addEvent(event);
+            feedbackLabel.setText("");
             refreshTable();
             clearForm();
         });
@@ -197,6 +208,7 @@ public class EventsView {
                 selected.setStatus(statusCombo.getValue());
 
                 eventService.updateEvent(selected);
+                feedbackLabel.setText("");
                 refreshTable();
             }
         });
@@ -204,7 +216,14 @@ public class EventsView {
         deleteBtn.setOnAction(e -> {
             Event selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {
+                if (registrationService.hasRegistrationForEvent(selected.getEventId())
+                        || attendanceService.hasAttendanceForEvent(selected.getEventId())) {
+                    feedbackLabel.setText("Delete blocked: this event has linked registrations or attendance.");
+                    return;
+                }
+
                 eventService.deleteEvent(selected.getEventId());
+                feedbackLabel.setText("");
                 refreshTable();
                 clearForm();
             }
@@ -213,7 +232,7 @@ public class EventsView {
         clearBtn.setOnAction(e -> clearForm());
 
         // Assemble everything
-        this.root.getChildren().addAll(titleLabel, formGrid, buttonBox, table);
+        this.root.getChildren().addAll(titleLabel, formGrid, buttonBox, feedbackLabel, table);
 
         refreshTable();
         clearForm(); // To set initial ID
@@ -233,6 +252,7 @@ public class EventsView {
         venueField.setText("");
         capacityField.setText("");
         statusCombo.getSelectionModel().clearSelection();
+        feedbackLabel.setText("");
     }
 
     public Parent getView() {

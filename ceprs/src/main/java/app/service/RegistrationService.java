@@ -139,4 +139,22 @@ public class RegistrationService {
         }
         return false;
     }
+
+    public boolean hasRegistrationForEvent(int eventId) {
+        for (Registration registration : registrations) {
+            if (registration.getEventId() == eventId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasRegistrationForParticipant(int participantId) {
+        for (Registration registration : registrations) {
+            if (registration.getParticipantId() == participantId) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

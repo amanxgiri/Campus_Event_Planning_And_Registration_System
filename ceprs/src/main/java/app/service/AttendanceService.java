@@ -62,4 +62,22 @@ public class AttendanceService {
             }
         }
     }
+
+    public boolean hasAttendanceForEvent(int eventId) {
+        for (AttendanceRecord record : attendanceRecords) {
+            if (record.getEventId() == eventId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasAttendanceForParticipant(int participantId) {
+        for (AttendanceRecord record : attendanceRecords) {
+            if (record.getParticipantId() == participantId) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

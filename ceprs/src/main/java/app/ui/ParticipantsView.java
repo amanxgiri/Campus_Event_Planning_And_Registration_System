@@ -1,7 +1,9 @@
 package app.ui;
 
 import app.model.Participant;
+import app.service.AttendanceService;
 import app.service.ParticipantService;
+import app.service.RegistrationService;
 import javafx.collections.FXCollections;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -22,15 +24,21 @@ public class ParticipantsView {
 
     private final VBox root;
     private final ParticipantService participantService;
+    private final RegistrationService registrationService;
+    private final AttendanceService attendanceService;
 
     private final TextField idField;
     private final TextField nameField;
     private final TextField emailField;
     private final TextField phoneField;
     private final TableView<Participant> table;
+    private final Label feedbackLabel;
 
-    public ParticipantsView(ParticipantService participantService) {
+    public ParticipantsView(ParticipantService participantService, RegistrationService registrationService,
+            AttendanceService attendanceService) {
         this.participantService = participantService;
+        this.registrationService = registrationService;
+        this.attendanceService = attendanceService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
 
@@ -54,6 +62,8 @@ public class ParticipantsView {
 
         this.phoneField = new TextField();
         this.phoneField.setPromptText("Phone");
+
+        this.feedbackLabel = new Label();
 
         formGrid.add(new Label("Participant ID:"), 0, 0);
         formGrid.add(idField, 1, 0);
@@ -110,6 +120,7 @@ public class ParticipantsView {
             participant.setPhone(phoneField.getText());
 
             participantService.addParticipant(participant);
+            feedbackLabel.setText("");
             refreshTable();
             clearForm();
         });
@@ -122,6 +133,7 @@ public class ParticipantsView {
                 selected.setPhone(phoneField.getText());
 
                 participantService.updateParticipant(selected);
+                feedbackLabel.setText("");
                 refreshTable();
                 clearForm();
             }
@@ -130,7 +142,14 @@ public class ParticipantsView {
         deleteBtn.setOnAction(e -> {
             Participant selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {
+                if (registrationService.hasRegistrationForParticipant(selected.getParticipantId())
+                        || attendanceService.hasAttendanceForParticipant(selected.getParticipantId())) {
+                    feedbackLabel.setText("Delete blocked: this participant has linked registrations or attendance.");
+                    return;
+                }
+
                 participantService.deleteParticipant(selected.getParticipantId());
+                feedbackLabel.setText("");
                 refreshTable();
                 clearForm();
             }
@@ -138,7 +157,7 @@ public class ParticipantsView {
 
         clearBtn.setOnAction(e -> clearForm());
 
-        this.root.getChildren().addAll(titleLabel, formGrid, buttonBox, table);
+        this.root.getChildren().addAll(titleLabel, formGrid, buttonBox, feedbackLabel, table);
 
         refreshTable();
         clearForm();
@@ -154,6 +173,7 @@ public class ParticipantsView {
         emailField.setText("");
         phoneField.setText("");
         table.getSelectionModel().clearSelection();
+        feedbackLabel.setText("");
     }
 
     public Parent getView() {
