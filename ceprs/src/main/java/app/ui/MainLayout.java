@@ -1,5 +1,6 @@
 package app.ui;
 
+import app.service.AttendanceService;
 import app.service.DashboardService;
 import app.service.EventService;
 import app.service.ParticipantService;
@@ -26,6 +27,7 @@ public class MainLayout {
     private final EventService eventService = new EventService();
     private final ParticipantService participantService = new ParticipantService();
     private final RegistrationService registrationService = new RegistrationService();
+    private final AttendanceService attendanceService = new AttendanceService();
     private final DashboardService dashboardService = new DashboardService(
             eventService,
             participantService,
@@ -90,7 +92,8 @@ public class MainLayout {
         registrationsBtn
                 .setOnAction(e -> setContent(
                         new RegistrationsView(eventService, participantService, registrationService).getView()));
-        attendanceBtn.setOnAction(e -> setContent(createPlaceholderView("Attendance")));
+        attendanceBtn.setOnAction(
+                e -> setContent(new AttendanceView(attendanceService, registrationService).getView()));
         searchReportsBtn.setOnAction(e -> setContent(createPlaceholderView("Search & Reports")));
 
         // Assemble the BorderPane
