@@ -3,6 +3,7 @@ package app.service;
 import app.model.Registration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class RegistrationService {
@@ -91,5 +92,27 @@ public class RegistrationService {
             }
         }
         return filtered;
+    }
+
+    public void applyCapacityRules(int eventId, int capacity) {
+        List<Registration> activeRegistrations = new ArrayList<>();
+        for (Registration registration : registrations) {
+            if (registration.getEventId() == eventId
+                    && !"CANCELLED".equalsIgnoreCase(registration.getRegistrationStatus())) {
+                activeRegistrations.add(registration);
+            }
+        }
+
+        activeRegistrations.sort(Comparator.comparingInt(Registration::getRegistrationId));
+
+        int availableSlots = Math.max(capacity, 0);
+        for (Registration registration : activeRegistrations) {
+            if (availableSlots > 0) {
+                registration.setRegistrationStatus("CONFIRMED");
+                availableSlots--;
+            } else {
+                registration.setRegistrationStatus("WAITLISTED");
+            }
+        }
     }
 }

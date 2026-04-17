@@ -1,5 +1,6 @@
 package app.ui;
 
+import app.model.Event;
 import app.model.Registration;
 import app.service.EventService;
 import app.service.ParticipantService;
@@ -143,7 +144,7 @@ public class RegistrationsView {
             registration.setRegistrationDate(datePicker.getValue());
 
             registrationService.addRegistration(registration);
-            eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
+            syncEventRegistrations(eventId);
             refreshTable();
             clearForm();
         });
@@ -151,6 +152,7 @@ public class RegistrationsView {
         updateBtn.setOnAction(e -> {
             Registration selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {
+                int previousEventId = selected.getEventId();
                 int eventId = parseInteger(eventIdField.getText());
                 int participantId = parseInteger(participantIdField.getText());
 
@@ -167,7 +169,7 @@ public class RegistrationsView {
                 updatedRegistration.setRegistrationDate(datePicker.getValue());
 
                 registrationService.updateRegistration(updatedRegistration);
-                eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
+                syncEventRegistrations(previousEventId, eventId);
                 refreshTable();
                 clearForm();
             }
@@ -176,8 +178,9 @@ public class RegistrationsView {
         cancelBtn.setOnAction(e -> {
             Registration selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {
+                int eventId = selected.getEventId();
                 registrationService.cancelRegistration(selected.getRegistrationId());
-                eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
+                syncEventRegistrations(eventId);
                 refreshTable();
                 clearForm();
             }
@@ -196,6 +199,16 @@ public class RegistrationsView {
                 && participantId > 0
                 && eventService.findEventById(eventId) != null
                 && participantService.findParticipantById(participantId) != null;
+    }
+
+    private void syncEventRegistrations(int... eventIds) {
+        for (int eventId : eventIds) {
+            Event event = eventService.findEventById(eventId);
+            if (event != null) {
+                registrationService.applyCapacityRules(eventId, event.getCapacity());
+            }
+        }
+        eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
     }
 
     private void refreshTable() {

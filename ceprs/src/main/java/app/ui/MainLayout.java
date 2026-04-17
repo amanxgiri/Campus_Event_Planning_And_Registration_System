@@ -41,6 +41,8 @@ public class MainLayout {
 
     public MainLayout() {
         fileService.loadData();
+        eventService.getAllEvents().forEach(
+                event -> registrationService.applyCapacityRules(event.getEventId(), event.getCapacity()));
         eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
         this.root = new BorderPane();
 
