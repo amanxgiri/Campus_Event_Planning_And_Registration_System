@@ -24,10 +24,30 @@ public class RegistrationService {
         this.registrations.add(registration);
     }
 
+    public void addRegistration(Registration registration) {
+        if (registration.getRegistrationId() <= 0) {
+            registration.setRegistrationId(nextRegistrationId++);
+        } else if (registration.getRegistrationId() >= nextRegistrationId) {
+            nextRegistrationId = registration.getRegistrationId() + 1;
+        }
+
+        this.registrations.add(registration);
+    }
+
     public void cancelRegistration(int registrationId) {
         for (Registration registration : registrations) {
             if (registration.getRegistrationId() == registrationId) {
                 registration.setRegistrationStatus("CANCELLED");
+                return;
+            }
+        }
+    }
+
+    public void updateRegistration(Registration updatedRegistration) {
+        for (int i = 0; i < registrations.size(); i++) {
+            Registration existingRegistration = registrations.get(i);
+            if (existingRegistration.getRegistrationId() == updatedRegistration.getRegistrationId()) {
+                registrations.set(i, updatedRegistration);
                 return;
             }
         }

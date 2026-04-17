@@ -2,6 +2,7 @@ package app.ui;
 
 import app.service.EventService;
 import app.service.ParticipantService;
+import app.service.RegistrationService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -23,6 +24,7 @@ public class MainLayout {
     private final StackPane contentArea;
     private final EventService eventService = new EventService();
     private final ParticipantService participantService = new ParticipantService();
+    private final RegistrationService registrationService = new RegistrationService();
 
     public MainLayout() {
         this.root = new BorderPane();
@@ -80,7 +82,9 @@ public class MainLayout {
         dashboardBtn.setOnAction(e -> setContent(new DashboardView(eventService).getView()));
         eventsBtn.setOnAction(e -> setContent(new EventsView(eventService).getView()));
         participantsBtn.setOnAction(e -> setContent(new ParticipantsView(participantService).getView()));
-        registrationsBtn.setOnAction(e -> setContent(createPlaceholderView("Registrations")));
+        registrationsBtn
+                .setOnAction(e -> setContent(
+                        new RegistrationsView(eventService, participantService, registrationService).getView()));
         attendanceBtn.setOnAction(e -> setContent(createPlaceholderView("Attendance")));
         searchReportsBtn.setOnAction(e -> setContent(createPlaceholderView("Search & Reports")));
 
