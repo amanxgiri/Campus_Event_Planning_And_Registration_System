@@ -1,6 +1,7 @@
 # Maven / Java
 target/
 *.class
+ceprs/data/
 
 # VS Code
 .vscode/
