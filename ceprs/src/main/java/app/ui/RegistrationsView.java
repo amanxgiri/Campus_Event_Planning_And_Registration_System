@@ -1,6 +1,7 @@
 package app.ui;
 
 import app.model.Event;
+import app.service.AttendanceService;
 import app.model.Registration;
 import app.service.EventService;
 import app.service.ParticipantService;
@@ -31,6 +32,7 @@ public class RegistrationsView {
     private final EventService eventService;
     private final ParticipantService participantService;
     private final RegistrationService registrationService;
+    private final AttendanceService attendanceService;
 
     private final TextField regIdField;
     private final TextField eventIdField;
@@ -41,10 +43,11 @@ public class RegistrationsView {
     private final Label feedbackLabel;
 
     public RegistrationsView(EventService eventService, ParticipantService participantService,
-            RegistrationService registrationService) {
+            RegistrationService registrationService, AttendanceService attendanceService) {
         this.eventService = eventService;
         this.participantService = participantService;
         this.registrationService = registrationService;
+        this.attendanceService = attendanceService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
 
@@ -188,6 +191,13 @@ public class RegistrationsView {
         cancelBtn.setOnAction(e -> {
             Registration selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {
+                if (attendanceService.hasAttendanceForRegistration(
+                        selected.getEventId(),
+                        selected.getParticipantId())) {
+                    feedbackLabel.setText("Cancel blocked: attendance has already been marked for this registration.");
+                    return;
+                }
+
                 int eventId = selected.getEventId();
                 registrationService.cancelRegistration(selected.getRegistrationId());
                 syncEventRegistrations(eventId);

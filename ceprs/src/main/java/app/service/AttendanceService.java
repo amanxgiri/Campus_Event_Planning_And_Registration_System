@@ -80,4 +80,13 @@ public class AttendanceService {
         }
         return false;
     }
+
+    public boolean hasAttendanceForRegistration(int eventId, int participantId) {
+        for (AttendanceRecord record : attendanceRecords) {
+            if (record.getEventId() == eventId && record.getParticipantId() == participantId) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

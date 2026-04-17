@@ -103,7 +103,8 @@ public class MainLayout {
                 new ParticipantsView(participantService, registrationService, attendanceService).getView()));
         registrationsBtn
                 .setOnAction(e -> setContent(
-                        new RegistrationsView(eventService, participantService, registrationService).getView()));
+                        new RegistrationsView(eventService, participantService, registrationService, attendanceService)
+                                .getView()));
         attendanceBtn.setOnAction(
                 e -> setContent(new AttendanceView(attendanceService, registrationService).getView()));
         searchReportsBtn.setOnAction(
