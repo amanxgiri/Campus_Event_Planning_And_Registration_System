@@ -21,7 +21,7 @@ import javafx.scene.text.FontWeight;
 public class ParticipantsView {
 
     private final VBox root;
-    private final ParticipantService participantService = new ParticipantService();
+    private final ParticipantService participantService;
 
     private final TextField idField;
     private final TextField nameField;
@@ -29,7 +29,8 @@ public class ParticipantsView {
     private final TextField phoneField;
     private final TableView<Participant> table;
 
-    public ParticipantsView() {
+    public ParticipantsView(ParticipantService participantService) {
+        this.participantService = participantService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
 
