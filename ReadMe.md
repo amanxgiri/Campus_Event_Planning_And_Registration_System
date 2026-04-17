@@ -4,6 +4,8 @@ Campus Event Planning and Registration System is a desktop application built wit
 
 The project is designed around a simple in-memory service layer with lightweight file persistence, which makes it suitable for academic projects, demos, and incremental feature development without introducing database complexity too early.
 
+This repository now uses a clean pure-JavaFX approach for the active application flow, with shared services, constructor-based view wiring, and no remaining dependency on template FXML screens.
+
 ## What the App Does
 
 The application helps manage the full event registration flow for a campus environment:
@@ -65,6 +67,7 @@ The application helps manage the full event registration flow for a campus envir
 ## Tech Stack
 
 - Java
+- JDK 24 runtime with compilation targeting Java 21
 - JavaFX
 - Maven
 - Modular Java (`module-info.java`)
@@ -92,9 +95,10 @@ The codebase follows a simple layered structure:
 - Services are shared through `MainLayout`
 - Views receive services through constructors
 - `TableView` columns use lambda-based bindings
-- The UI is built without FXML screen files
+- The UI is built without FXML screen files in the active application flow
 - Persistence is intentionally lightweight and file-based for now
 - The application favors controlled, incremental logic over heavy abstraction
+- Navigation is handled by `MainLayout` through dynamic view swapping
 
 ## Current Functional Scope
 
@@ -107,6 +111,7 @@ This version is already suitable for a demo or academic submission and includes:
 - search and reporting
 - local persistence
 - data integrity safeguards across modules
+- consistent inline UX feedback messages across major views
 
 ## How to Run
 
@@ -157,12 +162,27 @@ These files are generated runtime data and are ignored in git.
 
 Possible next enhancements include:
 
-- UI polish and better visual consistency
-- richer validation messages
+- richer validation rules and field-level guidance
 - more advanced reports and filters
 - export/import improvements
 - automated tests
 - database integration if the project moves beyond lightweight local persistence
+
+## Project Status
+
+Current status: functionally complete
+
+The app includes the main end-to-end workflows:
+
+- event management
+- participant management
+- registration and waitlist management
+- attendance tracking
+- dashboard summaries
+- search and reporting
+- local persistence
+
+Remaining work is optional polish rather than missing core functionality.
 
 ## Summary
 
