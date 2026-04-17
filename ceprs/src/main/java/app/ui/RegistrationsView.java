@@ -137,6 +137,11 @@ public class RegistrationsView {
                 return;
             }
 
+            if (registrationService.hasActiveRegistration(eventId, participantId, null)) {
+                feedbackLabel.setText("This participant already has an active registration for the event.");
+                return;
+            }
+
             Registration registration = new Registration();
             registration.setEventId(eventId);
             registration.setParticipantId(participantId);
@@ -158,6 +163,11 @@ public class RegistrationsView {
 
                 if (!hasValidLinkedIds(eventId, participantId)) {
                     feedbackLabel.setText("Enter existing Event ID and Participant ID before updating.");
+                    return;
+                }
+
+                if (registrationService.hasActiveRegistration(eventId, participantId, selected.getRegistrationId())) {
+                    feedbackLabel.setText("This participant already has an active registration for the event.");
                     return;
                 }
 

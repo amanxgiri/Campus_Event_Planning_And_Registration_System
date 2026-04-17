@@ -115,4 +115,17 @@ public class RegistrationService {
             }
         }
     }
+
+    public boolean hasActiveRegistration(int eventId, int participantId, Integer excludeRegistrationId) {
+        for (Registration registration : registrations) {
+            if (registration.getEventId() == eventId
+                    && registration.getParticipantId() == participantId
+                    && !"CANCELLED".equalsIgnoreCase(registration.getRegistrationStatus())
+                    && (excludeRegistrationId == null
+                            || registration.getRegistrationId() != excludeRegistrationId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
