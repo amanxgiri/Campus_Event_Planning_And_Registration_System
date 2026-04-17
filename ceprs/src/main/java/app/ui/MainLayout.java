@@ -7,7 +7,6 @@ import app.service.FileService;
 import app.service.ParticipantService;
 import app.service.RegistrationService;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -118,22 +117,6 @@ public class MainLayout {
 
     private void setContent(Parent view) {
         this.contentArea.getChildren().setAll(view);
-    }
-
-    private Parent createPlaceholderView(String title) {
-        VBox placeholder = new VBox(20);
-        placeholder.setAlignment(Pos.CENTER);
-
-        Label titleLabel = new Label(title);
-        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
-        titleLabel.setTextFill(Color.web("#2c3e50"));
-
-        Label subtitleLabel = new Label("This section is under construction");
-        subtitleLabel.setFont(Font.font("System", 16));
-        subtitleLabel.setTextFill(Color.web("#7f8c8d"));
-
-        placeholder.getChildren().addAll(titleLabel, subtitleLabel);
-        return placeholder;
     }
 
     public BorderPane getRoot() {
