@@ -91,6 +91,16 @@ public class ParticipantsView {
 
         table.getColumns().addAll(idCol, nameCol, emailCol, phoneCol);
 
+        // Table row selection
+        table.getSelectionModel().selectedItemProperty().addListener((obs, old, selected) -> {
+            if (selected != null) {
+                idField.setText(String.valueOf(selected.getParticipantId()));
+                nameField.setText(selected.getName());
+                emailField.setText(selected.getEmail());
+                phoneField.setText(selected.getPhone());
+            }
+        });
+
         // Events
         addBtn.setOnAction(e -> {
             Participant participant = new Participant();
@@ -102,6 +112,28 @@ public class ParticipantsView {
             participantService.addParticipant(participant);
             refreshTable();
             clearForm();
+        });
+
+        updateBtn.setOnAction(e -> {
+            Participant selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                selected.setName(nameField.getText());
+                selected.setEmail(emailField.getText());
+                selected.setPhone(phoneField.getText());
+
+                participantService.updateParticipant(selected);
+                refreshTable();
+                clearForm();
+            }
+        });
+
+        deleteBtn.setOnAction(e -> {
+            Participant selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                participantService.deleteParticipant(selected.getParticipantId());
+                refreshTable();
+                clearForm();
+            }
         });
 
         clearBtn.setOnAction(e -> clearForm());
