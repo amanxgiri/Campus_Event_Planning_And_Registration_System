@@ -104,7 +104,8 @@ public class MainLayout {
                         new RegistrationsView(eventService, participantService, registrationService).getView()));
         attendanceBtn.setOnAction(
                 e -> setContent(new AttendanceView(attendanceService, registrationService).getView()));
-        searchReportsBtn.setOnAction(e -> setContent(createPlaceholderView("Search & Reports")));
+        searchReportsBtn.setOnAction(
+                e -> setContent(new SearchReportsView(eventService, registrationService).getView()));
 
         // Assemble the BorderPane
         this.root.setTop(this.header);
