@@ -41,6 +41,7 @@ public class MainLayout {
 
     public MainLayout() {
         fileService.loadData();
+        eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
         this.root = new BorderPane();
 
         // 1. Header (Top)

@@ -143,6 +143,7 @@ public class RegistrationsView {
             registration.setRegistrationDate(datePicker.getValue());
 
             registrationService.addRegistration(registration);
+            eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
             refreshTable();
             clearForm();
         });
@@ -166,6 +167,7 @@ public class RegistrationsView {
                 updatedRegistration.setRegistrationDate(datePicker.getValue());
 
                 registrationService.updateRegistration(updatedRegistration);
+                eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
                 refreshTable();
                 clearForm();
             }
@@ -175,6 +177,7 @@ public class RegistrationsView {
             Registration selected = table.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 registrationService.cancelRegistration(selected.getRegistrationId());
+                eventService.updateRegistrationCounts(registrationService.getAllRegistrations());
                 refreshTable();
                 clearForm();
             }

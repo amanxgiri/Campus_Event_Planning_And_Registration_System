@@ -1,6 +1,7 @@
 package app.service;
 
 import app.model.Event;
+import app.model.Registration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,30 @@ public class EventService {
             return;
         }
         this.events = new ArrayList<>(events);
+    }
+
+    public void updateRegistrationCounts(List<Registration> registrations) {
+        for (Event event : events) {
+            event.setRegisteredCount(0);
+            event.setWaitlistCount(0);
+        }
+
+        if (registrations == null) {
+            return;
+        }
+
+        for (Registration registration : registrations) {
+            Event event = findEventById(registration.getEventId());
+            if (event == null || registration.getRegistrationStatus() == null) {
+                continue;
+            }
+
+            if ("CONFIRMED".equalsIgnoreCase(registration.getRegistrationStatus())) {
+                event.setRegisteredCount(event.getRegisteredCount() + 1);
+            } else if ("WAITLISTED".equalsIgnoreCase(registration.getRegistrationStatus())) {
+                event.setWaitlistCount(event.getWaitlistCount() + 1);
+            }
+        }
     }
 
     public Event findEventById(int eventId) {
