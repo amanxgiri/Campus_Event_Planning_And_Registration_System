@@ -37,6 +37,14 @@ public class ParticipantService {
         return new ArrayList<>(this.participants);
     }
 
+    public void replaceAllParticipants(List<Participant> participants) {
+        if (participants == null) {
+            this.participants = new ArrayList<>();
+            return;
+        }
+        this.participants = new ArrayList<>(participants);
+    }
+
     public Participant findParticipantById(int participantId) {
         for (Participant participant : participants) {
             if (participant.getParticipantId() == participantId) {

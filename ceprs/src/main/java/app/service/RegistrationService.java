@@ -57,6 +57,22 @@ public class RegistrationService {
         return new ArrayList<>(this.registrations);
     }
 
+    public void replaceAllRegistrations(List<Registration> registrations) {
+        if (registrations == null) {
+            this.registrations = new ArrayList<>();
+            this.nextRegistrationId = 1;
+            return;
+        }
+
+        this.registrations = new ArrayList<>(registrations);
+        this.nextRegistrationId = 1;
+        for (Registration registration : this.registrations) {
+            if (registration.getRegistrationId() >= this.nextRegistrationId) {
+                this.nextRegistrationId = registration.getRegistrationId() + 1;
+            }
+        }
+    }
+
     public List<Registration> getRegistrationsByEvent(int eventId) {
         List<Registration> filtered = new ArrayList<>();
         for (Registration registration : registrations) {

@@ -46,4 +46,20 @@ public class AttendanceService {
     public List<AttendanceRecord> getAllAttendanceRecords() {
         return new ArrayList<>(this.attendanceRecords);
     }
+
+    public void replaceAllAttendanceRecords(List<AttendanceRecord> attendanceRecords) {
+        if (attendanceRecords == null) {
+            this.attendanceRecords = new ArrayList<>();
+            this.nextAttendanceId = 1;
+            return;
+        }
+
+        this.attendanceRecords = new ArrayList<>(attendanceRecords);
+        this.nextAttendanceId = 1;
+        for (AttendanceRecord record : this.attendanceRecords) {
+            if (record.getAttendanceId() >= this.nextAttendanceId) {
+                this.nextAttendanceId = record.getAttendanceId() + 1;
+            }
+        }
+    }
 }

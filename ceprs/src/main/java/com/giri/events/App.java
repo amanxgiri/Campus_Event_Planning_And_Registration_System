@@ -21,6 +21,7 @@ public class App extends Application {
         MainLayout mainLayout = new MainLayout();
         scene = new Scene(mainLayout.getRoot(), 1000, 700);
         stage.setScene(scene);
+        stage.setOnCloseRequest(event -> mainLayout.getFileService().saveData());
         stage.show();
     }
 

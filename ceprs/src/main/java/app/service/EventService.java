@@ -37,6 +37,14 @@ public class EventService {
         return new ArrayList<>(this.events);
     }
 
+    public void replaceAllEvents(List<Event> events) {
+        if (events == null) {
+            this.events = new ArrayList<>();
+            return;
+        }
+        this.events = new ArrayList<>(events);
+    }
+
     public Event findEventById(int eventId) {
         for (Event event : events) {
             if (event.getEventId() == eventId) {

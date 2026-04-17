@@ -3,6 +3,7 @@ package app.ui;
 import app.service.AttendanceService;
 import app.service.DashboardService;
 import app.service.EventService;
+import app.service.FileService;
 import app.service.ParticipantService;
 import app.service.RegistrationService;
 import javafx.geometry.Insets;
@@ -28,12 +29,18 @@ public class MainLayout {
     private final ParticipantService participantService = new ParticipantService();
     private final RegistrationService registrationService = new RegistrationService();
     private final AttendanceService attendanceService = new AttendanceService();
+    private final FileService fileService = new FileService(
+            eventService,
+            participantService,
+            registrationService,
+            attendanceService);
     private final DashboardService dashboardService = new DashboardService(
             eventService,
             participantService,
             registrationService);
 
     public MainLayout() {
+        fileService.loadData();
         this.root = new BorderPane();
 
         // 1. Header (Top)
@@ -124,5 +131,9 @@ public class MainLayout {
 
     public BorderPane getRoot() {
         return root;
+    }
+
+    public FileService getFileService() {
+        return fileService;
     }
 }
