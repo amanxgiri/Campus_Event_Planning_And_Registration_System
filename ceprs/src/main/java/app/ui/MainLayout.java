@@ -1,5 +1,6 @@
 package app.ui;
 
+import app.service.DashboardService;
 import app.service.EventService;
 import app.service.ParticipantService;
 import app.service.RegistrationService;
@@ -25,6 +26,10 @@ public class MainLayout {
     private final EventService eventService = new EventService();
     private final ParticipantService participantService = new ParticipantService();
     private final RegistrationService registrationService = new RegistrationService();
+    private final DashboardService dashboardService = new DashboardService(
+            eventService,
+            participantService,
+            registrationService);
 
     public MainLayout() {
         this.root = new BorderPane();
@@ -75,11 +80,11 @@ public class MainLayout {
         this.contentArea = new StackPane();
         this.contentArea.setPadding(new Insets(20));
 
-        DashboardView dashboardView = new DashboardView(eventService);
+        DashboardView dashboardView = new DashboardView(dashboardService);
         setContent(dashboardView.getView());
 
         // Button Actions
-        dashboardBtn.setOnAction(e -> setContent(new DashboardView(eventService).getView()));
+        dashboardBtn.setOnAction(e -> setContent(new DashboardView(dashboardService).getView()));
         eventsBtn.setOnAction(e -> setContent(new EventsView(eventService).getView()));
         participantsBtn.setOnAction(e -> setContent(new ParticipantsView(participantService).getView()));
         registrationsBtn

@@ -1,6 +1,6 @@
 package app.ui;
 
-import app.service.EventService;
+import app.service.DashboardService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -14,10 +14,10 @@ import javafx.scene.text.FontWeight;
 public class DashboardView {
 
     private final VBox root;
-    private final EventService eventService;
+    private final DashboardService dashboardService;
 
-    public DashboardView(EventService eventService) {
-        this.eventService = eventService;
+    public DashboardView(DashboardService dashboardService) {
+        this.dashboardService = dashboardService;
         this.root = new VBox(20);
         this.root.setPadding(new Insets(20));
         // Optional light styling for the background of the view
@@ -31,16 +31,15 @@ public class DashboardView {
         // Cards container
         FlowPane cardsContainer = new FlowPane(15, 15);
 
-        String totalEvents = (this.eventService != null) ? String.valueOf(this.eventService.getAllEvents().size())
-                : "0";
-
         cardsContainer.getChildren().addAll(
-                createStatCard("Total Events", totalEvents),
-                createStatCard("Total Participants", "0"),
-                createStatCard("Confirmed Registrations", "0"),
-                createStatCard("Waitlisted Participants", "0"),
-                createStatCard("Upcoming Events", "0"),
-                createStatCard("Venue Conflicts", "0"));
+                createStatCard("Total Events", String.valueOf(this.dashboardService.getTotalEvents())),
+                createStatCard("Total Participants", String.valueOf(this.dashboardService.getTotalParticipants())),
+                createStatCard("Confirmed Registrations",
+                        String.valueOf(this.dashboardService.getConfirmedRegistrationsCount())),
+                createStatCard("Waitlisted Participants",
+                        String.valueOf(this.dashboardService.getWaitlistedParticipantsCount())),
+                createStatCard("Upcoming Events", String.valueOf(this.dashboardService.getUpcomingEventsCount())),
+                createStatCard("Venue Conflicts", String.valueOf(this.dashboardService.getVenueConflictsCount())));
 
         this.root.getChildren().addAll(titleLabel, cardsContainer);
     }
