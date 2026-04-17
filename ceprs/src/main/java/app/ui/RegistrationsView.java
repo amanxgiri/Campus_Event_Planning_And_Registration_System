@@ -77,6 +77,7 @@ public class RegistrationsView {
         this.datePicker.setPromptText("Registration Date");
 
         this.feedbackLabel = new Label();
+        this.feedbackLabel.setWrapText(true);
 
         formGrid.add(new Label("Registration ID:"), 0, 0);
         formGrid.add(regIdField, 1, 0);
@@ -136,12 +137,12 @@ public class RegistrationsView {
             int participantId = parseInteger(participantIdField.getText());
 
             if (!hasValidLinkedIds(eventId, participantId)) {
-                feedbackLabel.setText("Enter existing Event ID and Participant ID before adding.");
+                showError("Enter valid existing Event ID and Participant ID before adding a registration.");
                 return;
             }
 
             if (registrationService.hasActiveRegistration(eventId, participantId, null)) {
-                feedbackLabel.setText("This participant already has an active registration for the event.");
+                showError("This participant already has an active registration for the selected event.");
                 return;
             }
 
@@ -155,6 +156,7 @@ public class RegistrationsView {
             syncEventRegistrations(eventId);
             refreshTable();
             clearForm();
+            showSuccess("Registration saved successfully.");
         });
 
         updateBtn.setOnAction(e -> {
@@ -165,12 +167,12 @@ public class RegistrationsView {
                 int participantId = parseInteger(participantIdField.getText());
 
                 if (!hasValidLinkedIds(eventId, participantId)) {
-                    feedbackLabel.setText("Enter existing Event ID and Participant ID before updating.");
+                    showError("Enter valid existing Event ID and Participant ID before updating the registration.");
                     return;
                 }
 
                 if (registrationService.hasActiveRegistration(eventId, participantId, selected.getRegistrationId())) {
-                    feedbackLabel.setText("This participant already has an active registration for the event.");
+                    showError("This participant already has an active registration for the selected event.");
                     return;
                 }
 
@@ -185,6 +187,7 @@ public class RegistrationsView {
                 syncEventRegistrations(previousEventId, eventId);
                 refreshTable();
                 clearForm();
+                showSuccess("Registration updated successfully.");
             }
         });
 
@@ -194,7 +197,7 @@ public class RegistrationsView {
                 if (attendanceService.hasAttendanceForRegistration(
                         selected.getEventId(),
                         selected.getParticipantId())) {
-                    feedbackLabel.setText("Cancel blocked: attendance has already been marked for this registration.");
+                    showError("Cannot cancel this registration because attendance has already been marked.");
                     return;
                 }
 
@@ -203,6 +206,7 @@ public class RegistrationsView {
                 syncEventRegistrations(eventId);
                 refreshTable();
                 clearForm();
+                showSuccess("Registration cancelled successfully.");
             }
         });
 
@@ -243,6 +247,16 @@ public class RegistrationsView {
         statusCombo.getSelectionModel().clearSelection();
         datePicker.setValue(null);
         feedbackLabel.setText("");
+    }
+
+    private void showSuccess(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #1e8449;");
+        feedbackLabel.setText(message);
+    }
+
+    private void showError(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #c0392b;");
+        feedbackLabel.setText(message);
     }
 
     private int parseInteger(String value) {

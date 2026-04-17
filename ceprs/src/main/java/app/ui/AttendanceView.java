@@ -61,6 +61,7 @@ public class AttendanceView {
         this.statusCombo.setPromptText("Attendance Status");
 
         this.feedbackLabel = new Label();
+        this.feedbackLabel.setWrapText(true);
 
         formGrid.add(new Label("Attendance ID:"), 0, 0);
         formGrid.add(attendanceIdField, 1, 0);
@@ -108,13 +109,14 @@ public class AttendanceView {
             int participantId = parseInteger(participantIdField.getText());
 
             if (!hasConfirmedRegistration(eventId, participantId)) {
-                feedbackLabel.setText("Mark attendance only for a confirmed registration.");
+                showError("Attendance can only be marked for confirmed registrations.");
                 return;
             }
 
             attendanceService.markAttendance(eventId, participantId, statusCombo.getValue());
             refreshTable();
             clearForm();
+            showSuccess("Attendance saved successfully.");
         });
 
         clearBtn.setOnAction(e -> clearForm());
@@ -136,6 +138,16 @@ public class AttendanceView {
         participantIdField.setText("");
         statusCombo.getSelectionModel().clearSelection();
         feedbackLabel.setText("");
+    }
+
+    private void showSuccess(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #1e8449;");
+        feedbackLabel.setText(message);
+    }
+
+    private void showError(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #c0392b;");
+        feedbackLabel.setText(message);
     }
 
     private boolean hasConfirmedRegistration(int eventId, int participantId) {

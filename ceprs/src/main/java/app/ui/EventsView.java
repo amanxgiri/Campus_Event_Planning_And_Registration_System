@@ -86,6 +86,7 @@ public class EventsView {
         this.statusCombo.setPromptText("Status");
 
         this.feedbackLabel = new Label();
+        this.feedbackLabel.setWrapText(true);
 
         formGrid.add(new Label("Event ID:"), 0, 0);
         formGrid.add(idField, 1, 0);
@@ -186,9 +187,9 @@ public class EventsView {
 
             eventService.addEvent(event);
             syncEventRegistrationCounts(event.getEventId());
-            feedbackLabel.setText("");
             refreshTable();
             clearForm();
+            showSuccess("Event added successfully.");
         });
 
         updateBtn.setOnAction(e -> {
@@ -210,7 +211,7 @@ public class EventsView {
 
                 eventService.updateEvent(selected);
                 syncEventRegistrationCounts(selected.getEventId());
-                feedbackLabel.setText("");
+                showSuccess("Event updated successfully.");
                 refreshTable();
             }
         });
@@ -220,14 +221,14 @@ public class EventsView {
             if (selected != null) {
                 if (registrationService.hasRegistrationForEvent(selected.getEventId())
                         || attendanceService.hasAttendanceForEvent(selected.getEventId())) {
-                    feedbackLabel.setText("Delete blocked: this event has linked registrations or attendance.");
+                    showError("Cannot delete this event because linked registrations or attendance records exist.");
                     return;
                 }
 
                 eventService.deleteEvent(selected.getEventId());
-                feedbackLabel.setText("");
                 refreshTable();
                 clearForm();
+                showSuccess("Event deleted successfully.");
             }
         });
 
@@ -263,6 +264,16 @@ public class EventsView {
         capacityField.setText("");
         statusCombo.getSelectionModel().clearSelection();
         feedbackLabel.setText("");
+    }
+
+    private void showSuccess(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #1e8449;");
+        feedbackLabel.setText(message);
+    }
+
+    private void showError(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #c0392b;");
+        feedbackLabel.setText(message);
     }
 
     public Parent getView() {

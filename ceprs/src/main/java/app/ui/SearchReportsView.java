@@ -51,7 +51,9 @@ public class SearchReportsView {
         HBox searchBox = new HBox(10, keywordField, searchBtn, clearBtn);
 
         this.feedbackLabel = new Label();
+        this.feedbackLabel.setWrapText(true);
         this.reportLabel = new Label("Select an event to view registration summary.");
+        this.reportLabel.setWrapText(true);
 
         this.table = new TableView<>();
 
@@ -100,10 +102,10 @@ public class SearchReportsView {
         table.setItems(FXCollections.observableArrayList(results));
 
         if (results.isEmpty()) {
-            feedbackLabel.setText("No events found for the given keyword.");
+            showInfo("No events matched your search keyword.");
             reportLabel.setText("Select an event to view registration summary.");
         } else {
-            feedbackLabel.setText("Found " + results.size() + " matching event(s).");
+            showSuccess("Found " + results.size() + " matching event(s).");
         }
     }
 
@@ -146,6 +148,16 @@ public class SearchReportsView {
                         + ", Confirmed = " + confirmedCount
                         + ", Waitlisted = " + waitlistedCount
                         + ", Cancelled = " + cancelledCount);
+    }
+
+    private void showSuccess(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #1e8449;");
+        feedbackLabel.setText(message);
+    }
+
+    private void showInfo(String message) {
+        feedbackLabel.setStyle("-fx-text-fill: #2c3e50;");
+        feedbackLabel.setText(message);
     }
 
     public Parent getView() {
