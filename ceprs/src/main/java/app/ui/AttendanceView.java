@@ -1,7 +1,6 @@
 package app.ui;
 
 import app.model.AttendanceRecord;
-import app.model.Registration;
 import app.service.AttendanceService;
 import app.service.RegistrationService;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -108,8 +107,8 @@ public class AttendanceView {
             int eventId = parseInteger(eventIdField.getText());
             int participantId = parseInteger(participantIdField.getText());
 
-            if (!hasRegistration(eventId, participantId)) {
-                feedbackLabel.setText("Mark attendance only for an existing registration.");
+            if (!hasConfirmedRegistration(eventId, participantId)) {
+                feedbackLabel.setText("Mark attendance only for a confirmed registration.");
                 return;
             }
 
@@ -139,19 +138,10 @@ public class AttendanceView {
         feedbackLabel.setText("");
     }
 
-    private boolean hasRegistration(int eventId, int participantId) {
-        if (eventId <= 0 || participantId <= 0) {
-            return false;
-        }
-
-        for (Registration registration : registrationService.getAllRegistrations()) {
-            if (registration.getEventId() == eventId
-                    && registration.getParticipantId() == participantId
-                    && !"CANCELLED".equalsIgnoreCase(registration.getRegistrationStatus())) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasConfirmedRegistration(int eventId, int participantId) {
+        return eventId > 0
+                && participantId > 0
+                && registrationService.hasConfirmedRegistration(eventId, participantId);
     }
 
     private int parseInteger(String value) {

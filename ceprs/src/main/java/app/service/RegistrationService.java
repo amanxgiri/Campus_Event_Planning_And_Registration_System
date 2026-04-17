@@ -128,4 +128,15 @@ public class RegistrationService {
         }
         return false;
     }
+
+    public boolean hasConfirmedRegistration(int eventId, int participantId) {
+        for (Registration registration : registrations) {
+            if (registration.getEventId() == eventId
+                    && registration.getParticipantId() == participantId
+                    && "CONFIRMED".equalsIgnoreCase(registration.getRegistrationStatus())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
