@@ -1,6 +1,7 @@
 package app.ui;
 
 import app.model.Participant;
+
 import app.service.AttendanceService;
 import app.service.ParticipantService;
 import app.service.RegistrationService;
@@ -145,7 +146,8 @@ public class ParticipantsView {
             if (selected != null) {
                 if (registrationService.hasRegistrationForParticipant(selected.getParticipantId())
                         || attendanceService.hasAttendanceForParticipant(selected.getParticipantId())) {
-                    showError("Cannot delete this participant because linked registrations or attendance records exist.");
+                    showError(
+                            "Cannot delete this participant because linked registrations or attendance records exist.");
                     return;
                 }
 

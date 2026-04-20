@@ -62,7 +62,7 @@ The application helps manage the full event registration flow for a campus envir
 
 - Save data to local text files on application close
 - Load saved data automatically on startup
-- Persist events, participants, registrations, and attendance records in `ceprs/data/`
+- Persist events, participants, registrations, and attendance records in `data/`
 
 ## Tech Stack
 
@@ -117,7 +117,7 @@ This version is already suitable for a demo or academic submission and includes:
 
 ### Using Maven Wrapper
 
-From the `ceprs` directory:
+From the project root directory:
 
 ```bash
 ./mvnw javafx:run
@@ -146,7 +146,7 @@ On Windows:
 Runtime data is stored in:
 
 ```text
-ceprs/data/
+data/
 ```
 
 Typical files created there:

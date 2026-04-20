@@ -1,7 +1,7 @@
 # Maven / Java
 target/
 *.class
-ceprs/data/
+data/
 
 # VS Code
 .vscode/
@@ -9,3 +9,5 @@ ceprs/data/
 # OS files
 .DS_Store
 Thumbs.db
+
+.fake
