@@ -1,189 +1,70 @@
-# Campus Event Planning and Registration System
+# Campus Event Planning and Registration System 🎓📅
 
-Campus Event Planning and Registration System is a desktop application built with JavaFX for managing campus events, participants, registrations, attendance, and basic reporting in one place.
+A modular, desktop-based JavaFX application designed to streamline the management of campus events, from initial planning and registration to attendance tracking and reporting.
 
-The project is designed around a simple in-memory service layer with lightweight file persistence, which makes it suitable for academic projects, demos, and incremental feature development without introducing database complexity too early.
+## 🚀 The Motivation
 
-This repository now uses a clean pure-JavaFX approach for the active application flow, with shared services, constructor-based view wiring, and no remaining dependency on template FXML screens.
+This project was born out of a real-world need. While managing events for my own campus clubs, I witnessed firsthand the chaos of manual event planning—handling scattered spreadsheets, tracking waitlists by hand, and struggling to keep attendance records accurate. 
 
-## What the App Does
+I developed this system to provide a centralized, automated solution that simplifies the entire event lifecycle, allowing campus organizers to focus more on the event experience and less on administrative overhead.
 
-The application helps manage the full event registration flow for a campus environment:
+## ✨ Key Features
 
-- Create, update, view, and delete events
-- Create, update, view, and delete participants
-- Register participants for events using shared services
-- Automatically manage confirmed and waitlisted registrations based on event capacity
-- Prevent duplicate active registrations for the same participant-event pair
-- Cancel registrations safely
-- Mark attendance only for confirmed registrations
-- View dashboard metrics such as total events, total participants, confirmed registrations, waitlisted participants, upcoming events, and venue conflicts
-- Search events by name and view registration summaries
-- Persist application data locally between runs
+- **Dynamic Event Management:** Create and track events with capacity limits and venue scheduling.
+- **Smart Registration & Waitlisting:** 
+    - Automatically confirms participants until capacity is reached.
+    - Moves additional registrants to a **Waitlist**.
+    - **Automatic Promotion:** When a confirmed registration is cancelled, the system automatically promotes the next person on the waitlist to "Confirmed" status.
+- **Attendance Tracking:** Link attendance records directly to confirmed registrations.
+- **Live Dashboard:** Real-time metrics on total participation, upcoming events, and venue conflicts.
+- **Search & Reporting:** Filter events by keyword and view detailed registration summaries.
+- **Portable Persistence:** All data is saved to local text files in the `data/` folder, making the project easy to share and run.
 
-## Core Features
+## 📸 Screenshots
 
-### Event Management
+*(Add your screenshots here to show off the UI)*
 
-- Add, update, delete, and view campus events
-- Track event metadata such as type, date, time, venue, capacity, and status
-- Automatically display registered and waitlisted counts per event
-- Prevent deleting events that already have linked registrations or attendance records
+> **Tip:** You can use the files listed in `PROJECT_SUBMISSION.md` as a guide for what to capture.
 
-### Participant Management
+## 🛠️ Tech Stack
 
-- Add, update, delete, and view participant records
-- Store participant name, email, and phone details
-- Prevent deleting participants that already have linked registrations or attendance records
+- **Language:** Java 21+
+- **Framework:** JavaFX (Pure Java UI construction - No FXML)
+- **Build Tool:** Maven
+- **Modular Java:** Full `module-info` support
+- **Architecture:** Layered (Model-Service-UI) with Constructor-based Dependency Injection
 
-### Registration Management
+## 🏃 How to Run
 
-- Create registrations using shared `EventService`, `ParticipantService`, and `RegistrationService`
-- Validate event and participant IDs before registration
-- Block duplicate active registrations for the same event and participant
-- Support registration updates and cancellation
-- Apply capacity-based promotion and waitlist logic automatically
-- Recalculate event registration counts when registrations or capacities change
-- Block registration cancellation after attendance has been marked
+Since this project uses the Maven Wrapper, you don't need Maven installed locally.
 
-### Attendance Management
-
-- Mark attendance for registered participants
-- Restrict attendance marking to confirmed registrations only
-- Store and display attendance records in a dedicated screen
-
-### Dashboard and Reports
-
-- Show live summary cards for key metrics
-- Search events by keyword
-- Show registration summary totals for selected events
-
-### Persistence
-
-- Save data to local text files on application close
-- Load saved data automatically on startup
-- Persist events, participants, registrations, and attendance records in `data/`
-
-## Tech Stack
-
-- Java
-- JDK 24 runtime with compilation targeting Java 21
-- JavaFX
-- Maven
-- Modular Java (`module-info.java`)
-- Pure JavaFX UI construction in Java code
-- In-memory services with local file-based persistence
-
-## Project Structure
-
-The codebase follows a simple layered structure:
-
-- `app.model`  
-  Plain Java objects such as `Event`, `Participant`, `Registration`, and `AttendanceRecord`
-
-- `app.service`  
-  Business logic and in-memory service classes such as `EventService`, `ParticipantService`, `RegistrationService`, `AttendanceService`, `DashboardService`, and `FileService`
-
-- `app.ui`  
-  JavaFX views such as `DashboardView`, `EventsView`, `ParticipantsView`, `RegistrationsView`, `AttendanceView`, and `SearchReportsView`
-
-- `MainLayout`  
-  The shared application shell that owns service instances and handles navigation between screens
-
-## Architecture Notes
-
-- Services are shared through `MainLayout`
-- Views receive services through constructors
-- `TableView` columns use lambda-based bindings
-- The UI is built without FXML screen files in the active application flow
-- Persistence is intentionally lightweight and file-based for now
-- The application favors controlled, incremental logic over heavy abstraction
-- Navigation is handled by `MainLayout` through dynamic view swapping
-
-## Current Functional Scope
-
-This version is already suitable for a demo or academic submission and includes:
-
-- working CRUD for events and participants
-- registration add, update, cancel, validation, waitlist, and duplicate prevention
-- attendance flow linked to registrations
-- dashboard metrics
-- search and reporting
-- local persistence
-- data integrity safeguards across modules
-- consistent inline UX feedback messages across major views
-
-## How to Run
-
-### Using Maven Wrapper
-
-From the project root directory:
-
-```bash
-./mvnw javafx:run
-```
-
-On Windows:
-
+### On Windows
 ```powershell
 .\mvnw.cmd javafx:run
 ```
 
-### Build Only
-
+### On macOS/Linux
 ```bash
-./mvnw compile
+./mvnw javafx:run
 ```
 
-On Windows:
+## 📂 Project Structure
 
-```powershell
-.\mvnw.cmd compile
-```
+- `src/main/java/app/model`: Core data entities (Event, Participant, etc.)
+- `src/main/java/app/service`: Business logic and waitlist algorithms.
+- `src/main/java/app/ui`: JavaFX screen implementations.
+- `data/`: Local persistence files (Generated at runtime).
 
-## Data Storage
+## 🗺️ Roadmap (Phase 2)
 
-Runtime data is stored in:
+We are planning several advanced features for the next version:
+- **Security:** Role-Based Access Control (Admin vs. Student).
+- **Automation:** Automated email notifications for waitlist promotion.
+- **UI/UX:** Custom CSS themes and "Search-as-you-type" filtering.
+- **Testing:** Comprehensive JUnit and TestFX suites.
 
-```text
-data/
-```
+*See `improvements.md` for the full technical roadmap.*
 
-Typical files created there:
+## 📄 License
 
-- `events.txt`
-- `participants.txt`
-- `registrations.txt`
-- `attendance.txt`
-
-These files are generated runtime data and are ignored in git.
-
-## Future Improvements
-
-Possible next enhancements include:
-
-- richer validation rules and field-level guidance
-- more advanced reports and filters
-- export/import improvements
-- automated tests
-- database integration if the project moves beyond lightweight local persistence
-
-## Project Status
-
-Current status: functionally complete
-
-The app includes the main end-to-end workflows:
-
-- event management
-- participant management
-- registration and waitlist management
-- attendance tracking
-- dashboard summaries
-- search and reporting
-- local persistence
-
-Remaining work is optional polish rather than missing core functionality.
-
-## Summary
-
-This project demonstrates a modular JavaFX desktop application with shared-service architecture, event registration workflows, attendance tracking, dashboard reporting, and local persistence, while keeping the design simple enough to understand and extend.
+Developed by **Aman Kumar Giri** (Roll: 245891006) as part of the Campus Management Series.
